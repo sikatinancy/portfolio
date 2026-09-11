@@ -1,0 +1,16 @@
+.git
+.gitignore
+.venv
+__pycache__
+*.pyc
+*.pyo
+.mypy_cache
+.pytest_cache
+.ruff_cache
+htmlcov
+.env
+.env.*
+media/
+staticfiles/
+node_modules/
+.DS_Store
