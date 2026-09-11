@@ -1,0 +1,61 @@
+<footer class="border-t border-white/10 bg-slate-950">
+
+    <div
+        class="mx-auto max-w-7xl px-6 py-10 lg:px-8"
+    >
+
+        <div
+            class="flex flex-col items-center justify-between gap-6 md:flex-row"
+        >
+
+            <div>
+                <p class="text-lg font-bold text-white">
+                    Nancy<span class="text-cyan-400">.</span>
+                </p>
+
+                <p class="mt-2 text-sm text-slate-400">
+                    Développeuse Python & Django
+                </p>
+            </div>
+
+            {% if profile %}
+
+                <div class="flex gap-4">
+
+                    {% if profile.github %}
+                        <a
+                            href="{{ profile.github }}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="social-link"
+                        >
+                            GitHub
+                        </a>
+                    {% endif %}
+
+                    {% if profile.linkedin %}
+                        <a
+                            href="{{ profile.linkedin }}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="social-link"
+                        >
+                            LinkedIn
+                        </a>
+                    {% endif %}
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+        <div
+            class="mt-8 border-t border-white/10 pt-6 text-center text-sm text-slate-500"
+        >
+            © {% now "Y" %} Nancy Melissa. Tous droits réservés.
+        </div>
+
+    </div>
+
+</footer>

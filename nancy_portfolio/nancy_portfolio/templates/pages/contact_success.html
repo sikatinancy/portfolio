@@ -1,0 +1,37 @@
+{% extends "pages/base.html" %}
+
+{% block title %}
+    Message envoyé
+{% endblock %}
+
+{% block content %}
+
+<section class="flex min-h-screen items-center justify-center px-6">
+
+    <div class="glass-card max-w-xl text-center">
+
+        <div class="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-emerald-400/10 text-4xl">
+            ✓
+        </div>
+
+        <h1 class="mt-8 text-4xl font-black">
+            Message envoyé !
+        </h1>
+
+        <p class="mt-5 leading-8 text-slate-400">
+            Merci pour votre message.
+            Je reviendrai vers vous dès que possible.
+        </p>
+
+        <a
+            href="{% url 'users:home' %}"
+            class="mt-8 inline-flex rounded-full bg-cyan-400 px-7 py-3 font-bold text-slate-950"
+        >
+            Retour au portfolio
+        </a>
+
+    </div>
+
+</section>
+
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends "pages/base.html" %}
+
+{% block title %}
+    Services — {{ profile.full_name }}
+{% endblock %}
+
+{% block content %}
+
+<section class="min-h-screen pt-32">
+
+    <div class="section-container">
+
+        <div class="section-heading">
+
+            <span class="section-label">
+                SERVICES
+            </span>
+
+            <h1 class="section-title">
+                Ce que je propose
+            </h1>
+
+        </div>
+
+
+        <div class="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+
+            {% for service in services %}
+
+                <article class="service-card">
+
+                    <div class="service-icon">
+                        {{ service.icon|default:"✦" }}
+                    </div>
+
+                    <h2 class="mt-6 text-2xl font-bold">
+                        {{ service.title }}
+                    </h2>
+
+                    <p class="mt-4 leading-7 text-slate-400">
+                        {{ service.description }}
+                    </p>
+
+                </article>
+
+            {% empty %}
+
+                <p class="text-slate-400">
+                    Aucun service disponible.
+                </p>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

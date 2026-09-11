@@ -1,0 +1,2519 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard | Portfolio</title>
+
+    <link rel="stylesheet" href="{% static 'css/output.css' %}">
+</head>
+
+<body class="dashboard-body">
+
+<div class="dashboard-layout">
+
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
+
+    <aside class="dashboard-sidebar">
+
+        <div class="sidebar-brand">
+
+            <div class="brand-logo">
+                N
+            </div>
+
+            <div>
+                <h1>Portfolio</h1>
+                <span>Administration</span>
+            </div>
+
+        </div>
+
+
+        <nav class="sidebar-nav">
+
+            <a
+                href="{% url 'users:dashboard' %}"
+                class="sidebar-link active"
+            >
+                <span>⌂</span>
+                <span>Dashboard</span>
+            </a>
+
+
+            <a
+                href="{% url 'users:dashboard-profile' %}"
+                class="sidebar-link"
+            >
+                <span>◉</span>
+                <span>Mon profil</span>
+            </a>
+
+
+            <a
+                href="{% url 'users:messages' %}"
+                class="sidebar-link"
+            >
+                <span>✉</span>
+                <span>Messages</span>
+
+                {% if unread_messages %}
+                    <span class="sidebar-badge">
+                        {{ unread_messages }}
+                    </span>
+                {% endif %}
+
+            </a>
+
+
+            <div class="sidebar-section-title">
+                PORTFOLIO
+            </div>
+
+
+            <a href="#projects" class="sidebar-link">
+                <span>▣</span>
+                <span>Projets</span>
+            </a>
+
+
+            <a href="#skills" class="sidebar-link">
+                <span>◆</span>
+                <span>Compétences</span>
+            </a>
+
+
+            <a href="#experiences" class="sidebar-link">
+                <span>◷</span>
+                <span>Expériences</span>
+            </a>
+
+
+            <a href="#" class="sidebar-link">
+                <span>▤</span>
+                <span>Formations</span>
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-bottom">
+
+            <a
+                href="{% url 'portfolio:home' %}"
+                target="_blank"
+                class="sidebar-link"
+            >
+                <span>↗</span>
+                <span>Voir mon portfolio</span>
+            </a>
+
+
+            <a
+                href="{% url 'users:logout' %}"
+                class="sidebar-link logout-link"
+            >
+                <span>⇥</span>
+                <span>Déconnexion</span>
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <!-- =====================================================
+         MAIN
+    ====================================================== -->
+
+    <main class="dashboard-main">
+
+
+        <!-- =================================================
+             HEADER
+        ================================================== -->
+
+        <header class="dashboard-header">
+
+            <button
+                type="button"
+                id="sidebarToggle"
+                class="mobile-menu-button"
+            >
+                ☰
+            </button>
+
+
+            <div>
+
+                <p class="dashboard-header-small">
+                    ESPACE ADMINISTRATEUR
+                </p>
+
+                <h2>
+                    Bonjour
+                    {{ profile.full_name|default:"Nancy" }}
+                    👋
+                </h2>
+
+            </div>
+
+
+            <div class="dashboard-header-actions">
+
+                <a
+                    href="{% url 'users:messages' %}"
+                    class="notification-button"
+                >
+                    ✉
+
+                    {% if unread_messages %}
+                        <span>
+                            {{ unread_messages }}
+                        </span>
+                    {% endif %}
+
+                </a>
+
+
+                <div class="admin-profile">
+
+                    {% if profile.profile_image %}
+
+                        <img
+                            src="{{ profile.profile_image.url }}"
+                            alt="{{ profile.full_name }}"
+                        >
+
+                    {% else %}
+
+                        <div class="admin-avatar">
+                            {{ profile.full_name|first|upper }}
+                        </div>
+
+                    {% endif %}
+
+
+                    <div>
+
+                        <strong>
+                            {{ profile.full_name|default:"Nancy Melissa" }}
+                        </strong>
+
+                        <span>
+                            Administratrice
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- =================================================
+             CONTENT
+        ================================================== -->
+
+        <section class="dashboard-content">
+
+
+            <!-- =================================================
+                 MESSAGES DJANGO
+            ================================================== -->
+
+            {% if messages %}
+
+                <div class="dashboard-messages">
+
+                    {% for message in messages %}
+
+                        <div class="dashboard-message">
+                            {{ message }}
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            {% endif %}
+
+
+            <!-- =================================================
+                 WELCOME
+            ================================================== -->
+
+            <div class="welcome-card">
+
+                <div>
+
+                    <span class="welcome-label">
+                        VOTRE PORTFOLIO
+                    </span>
+
+
+                    <h3>
+                        Gérez votre présence professionnelle
+                    </h3>
+
+
+                    <p>
+                        Modifiez votre profil, vos projets,
+                        vos compétences et échangez avec vos visiteurs
+                        depuis votre espace d'administration.
+                    </p>
+
+                </div>
+
+
+                <a
+                    href="{% url 'portfolio:home' %}"
+                    target="_blank"
+                    class="primary-button"
+                >
+                    Voir le portfolio →
+                </a>
+
+            </div>
+
+
+            <!-- =================================================
+                 STATISTICS
+            ================================================== -->
+
+            <div class="statistics-grid">
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon purple">
+                        ◇
+                    </div>
+
+                    <div>
+                        <span>Projets</span>
+                        <strong>{{ projects_count }}</strong>
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon blue">
+                        ◆
+                    </div>
+
+                    <div>
+                        <span>Compétences</span>
+                        <strong>{{ skills_count }}</strong>
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon green">
+                        ◷
+                    </div>
+
+                    <div>
+                        <span>Expériences</span>
+                        <strong>{{ experiences_count }}</strong>
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon orange">
+                        ✉
+                    </div>
+
+                    <div>
+                        <span>Messages</span>
+                        <strong>{{ messages_count }}</strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 PROJETS
+            ================================================== -->
+
+            <div
+                id="projects"
+                class="dashboard-section"
+            >
+
+                <div class="section-heading">
+
+                    <div>
+
+                        <span>PORTFOLIO</span>
+
+                        <h3>
+                            Projets
+                        </h3>
+
+                        <p>
+                            Gérez les projets affichés sur votre portfolio.
+                        </p>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        onclick="openModal('createProjectModal')"
+                        class="primary-button"
+                    >
+                        + Ajouter un projet
+                    </button>
+
+                </div>
+
+
+                <div class="overflow-x-auto">
+
+                    <table
+                        id="projectsTable"
+                        class="display w-full"
+                    >
+
+                        <thead>
+
+                            <tr>
+                                <th>Image</th>
+                                <th>Projet</th>
+                                <th>Technologies</th>
+                                <th>Statut</th>
+                                <th>Actions</th>
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            {% for project in projects %}
+
+                                <tr>
+
+                                    <td>
+
+                                        {% if project.image %}
+
+                                            <img
+                                                src="{{ project.image.url }}"
+                                                alt="{{ project.title }}"
+                                                class="h-12 w-16 rounded-lg object-cover"
+                                            >
+
+                                        {% else %}
+
+                                            <div class="flex h-12 w-16 items-center justify-center rounded-lg bg-slate-800 text-xs text-slate-500">
+                                                Aucun
+                                            </div>
+
+                                        {% endif %}
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <div class="font-bold">
+                                            {{ project.title }}
+                                        </div>
+
+                                        <div class="text-xs">
+                                            {{ project.short_description|truncatechars:60 }}
+                                        </div>
+
+                                    </td>
+
+
+                                    <td>
+                                        {{ project.technologies|truncatechars:50 }}
+                                    </td>
+
+
+                                    <td>
+
+                                        {% if project.is_active %}
+
+                                            <span class="status-active">
+                                                Actif
+                                            </span>
+
+                                        {% else %}
+
+                                            <span class="status-inactive">
+                                                Inactif
+                                            </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <div class="flex flex-wrap gap-2">
+
+                                            <button
+                                                type="button"
+                                                onclick="openModal('viewProject{{ project.id }}')"
+                                                class="action-view"
+                                            >
+                                                Voir
+                                            </button>
+
+
+                                            <button
+                                                type="button"
+                                                onclick="openModal('editProject{{ project.id }}')"
+                                                class="action-edit"
+                                            >
+                                                Modifier
+                                            </button>
+
+
+                                            <button
+                                                type="button"
+                                                onclick="openModal('deleteProject{{ project.id }}')"
+                                                class="action-delete"
+                                            >
+                                                Supprimer
+                                            </button>
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+
+                            {% empty %}
+
+                                <tr>
+                                    <td colspan="5">
+                                        Aucun projet enregistré.
+                                    </td>
+                                </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 COMPETENCES
+            ================================================== -->
+
+            <div
+                id="skills"
+                class="dashboard-section"
+            >
+
+                <div class="section-heading">
+
+                    <div>
+
+                        <span>PORTFOLIO</span>
+
+                        <h3>
+                            Compétences
+                        </h3>
+
+                        <p>
+                            Gérez vos compétences professionnelles.
+                        </p>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        onclick="openModal('createSkillModal')"
+                        class="primary-button"
+                    >
+                        + Ajouter une compétence
+                    </button>
+
+                </div>
+
+
+                <div class="overflow-x-auto">
+
+                    <table
+                        id="skillsTable"
+                        class="display w-full"
+                    >
+
+                        <thead>
+
+                            <tr>
+                                <th>Nom</th>
+                                <th>Catégorie</th>
+                                <th>Niveau</th>
+                                <th>Statut</th>
+                                <th>Actions</th>
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            {% for skill in skills %}
+
+                                <tr>
+
+                                    <td class="font-bold">
+                                        {{ skill.name }}
+                                    </td>
+
+
+                                    <td>
+                                        {{ skill.get_category_display }}
+                                    </td>
+
+
+                                    <td>
+                                        {{ skill.percentage }}%
+                                    </td>
+
+
+                                    <td>
+
+                                        {% if skill.is_active %}
+
+                                            <span class="status-active">
+                                                Actif
+                                            </span>
+
+                                        {% else %}
+
+                                            <span class="status-inactive">
+                                                Inactif
+                                            </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <div class="flex flex-wrap gap-2">
+
+                                            <button
+                                                type="button"
+                                                onclick="openModal('viewSkill{{ skill.id }}')"
+                                                class="action-view"
+                                            >
+                                                Voir
+                                            </button>
+
+
+                                            <button
+                                                type="button"
+                                                onclick="openModal('editSkill{{ skill.id }}')"
+                                                class="action-edit"
+                                            >
+                                                Modifier
+                                            </button>
+
+
+                                            <button
+                                                type="button"
+                                                onclick="openModal('deleteSkill{{ skill.id }}')"
+                                                class="action-delete"
+                                            >
+                                                Supprimer
+                                            </button>
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+
+                            {% empty %}
+
+                                <tr>
+                                    <td colspan="5">
+                                        Aucune compétence enregistrée.
+                                    </td>
+                                </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 EXPERIENCES
+            ================================================== -->
+
+            <div
+                id="experiences"
+                class="dashboard-section"
+            >
+
+                <div class="section-heading">
+
+                    <div>
+
+                        <span>PARCOURS</span>
+
+                        <h3>
+                            Expériences professionnelles
+                        </h3>
+
+                        <p>
+                            Gérez votre parcours professionnel.
+                        </p>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        onclick="openModal('createExperienceModal')"
+                        class="primary-button"
+                    >
+                        + Ajouter une expérience
+                    </button>
+
+                </div>
+
+
+                <div class="overflow-x-auto">
+
+                    <table
+                        id="experiencesTable"
+                        class="display w-full"
+                    >
+
+                        <thead>
+
+                            <tr>
+                                <th>Poste</th>
+                                <th>Entreprise</th>
+                                <th>Localisation</th>
+                                <th>Période</th>
+                                <th>Actions</th>
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            {% for experience in experiences %}
+
+                                <tr>
+
+                                    <td class="font-bold">
+                                        {{ experience.position }}
+                                    </td>
+
+
+                                    <td>
+                                        {{ experience.company }}
+                                    </td>
+
+
+                                    <td>
+                                        {{ experience.location|default:"-" }}
+                                    </td>
+
+
+                                    <td>
+
+                                        {% if experience.start_date %}
+                                            {{ experience.start_date|date:"m/Y" }}
+                                        {% else %}
+                                            -
+                                        {% endif %}
+
+                                        -
+
+                                        {% if experience.is_current %}
+                                            Aujourd'hui
+                                        {% elif experience.end_date %}
+                                            {{ experience.end_date|date:"m/Y" }}
+                                        {% else %}
+                                            -
+                                        {% endif %}
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <div class="flex flex-wrap gap-2">
+
+                                            <button
+                                                type="button"
+                                                onclick="openModal('viewExperience{{ experience.id }}')"
+                                                class="action-view"
+                                            >
+                                                Voir
+                                            </button>
+
+
+                                            <button
+                                                type="button"
+                                                onclick="openModal('editExperience{{ experience.id }}')"
+                                                class="action-edit"
+                                            >
+                                                Modifier
+                                            </button>
+
+
+                                            <button
+                                                type="button"
+                                                onclick="openModal('deleteExperience{{ experience.id }}')"
+                                                class="action-delete"
+                                            >
+                                                Supprimer
+                                            </button>
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+
+                            {% empty %}
+
+                                <tr>
+                                    <td colspan="5">
+                                        Aucune expérience enregistrée.
+                                    </td>
+                                </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 RECENT CONVERSATIONS
+            ================================================== -->
+
+            <div class="dashboard-section">
+
+                <div class="section-heading">
+
+                    <div>
+                        <span>MESSAGERIE</span>
+                        <h3>Conversations récentes</h3>
+                    </div>
+
+                    <a href="{% url 'users:messages' %}">
+                        Voir toutes →
+                    </a>
+
+                </div>
+
+
+                <div class="conversation-list">
+
+                    {% for conversation in recent_conversations %}
+
+                        <a
+                            href="{% url 'users:chat' conversation.id %}"
+                            class="conversation-item"
+                        >
+
+                            <div class="conversation-avatar">
+                                {{ conversation.visitor_name|first|upper }}
+                            </div>
+
+
+                            <div class="conversation-info">
+
+                                <strong>
+                                    {{ conversation.visitor_name }}
+                                </strong>
+
+                                <span>
+                                    {{ conversation.subject|default:"Nouvelle conversation" }}
+                                </span>
+
+                            </div>
+
+
+                            <div class="conversation-date">
+                                {{ conversation.updated_at|date:"d/m/Y H:i" }}
+                            </div>
+
+                        </a>
+
+                    {% empty %}
+
+                        <div class="empty-state">
+
+                            <div class="empty-icon">
+                                ✉
+                            </div>
+
+                            <h4>
+                                Aucune conversation
+                            </h4>
+
+                            <p>
+                                Les messages de vos visiteurs apparaîtront ici.
+                            </p>
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 QUICK ACTIONS
+            ================================================== -->
+
+            <div class="dashboard-section">
+
+                <div class="section-heading">
+
+                    <div>
+                        <span>ACCÈS RAPIDE</span>
+                        <h3>Actions rapides</h3>
+                    </div>
+
+                </div>
+
+
+                <div class="quick-actions">
+
+                    <a
+                        href="{% url 'users:dashboard-profile' %}"
+                        class="quick-action"
+                    >
+
+                        <div class="quick-action-icon">
+                            ◉
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Modifier mon profil
+                            </strong>
+
+                            <span>
+                                Informations personnelles
+                            </span>
+
+                        </div>
+
+                        <b>→</b>
+
+                    </a>
+
+
+                    <a
+                        href="{% url 'users:messages' %}"
+                        class="quick-action"
+                    >
+
+                        <div class="quick-action-icon">
+                            ✉
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Consulter les messages
+                            </strong>
+
+                            <span>
+                                Répondre à vos visiteurs
+                            </span>
+
+                        </div>
+
+                        <b>→</b>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- =========================================================
+     MODALES
+========================================================= -->
+
+
+<!-- =========================================================
+     MODALE : AJOUTER PROJET
+========================================================= -->
+
+<div
+    id="createProjectModal"
+    class="modal fixed inset-0 z-[100] hidden items-center justify-center bg-black/70 p-4 backdrop-blur-sm"
+>
+
+    <div class="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-2xl bg-slate-900 p-6">
+
+        <div class="mb-6 flex items-center justify-between">
+
+            <h3 class="text-2xl font-black">
+                Ajouter un projet
+            </h3>
+
+            <button
+                type="button"
+                onclick="closeModal('createProjectModal')"
+                class="text-2xl text-slate-400 hover:text-white"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <form
+            method="POST"
+            action="{% url 'users:project-create' %}"
+            enctype="multipart/form-data"
+            class="space-y-5"
+        >
+
+            {% csrf_token %}
+
+
+            <div>
+
+                <label class="form-label">
+                    Titre
+                </label>
+
+                <input
+                    type="text"
+                    name="title"
+                    required
+                    class="form-input"
+                >
+
+            </div>
+
+
+            <div>
+
+                <label class="form-label">
+                    Image du projet
+                </label>
+
+                <input
+                    type="file"
+                    name="image"
+                    accept="image/*"
+                    class="form-input"
+                >
+
+            </div>
+
+
+            <div>
+
+                <label class="form-label">
+                    Description courte
+                </label>
+
+                <textarea
+                    name="short_description"
+                    rows="3"
+                    class="form-input"
+                ></textarea>
+
+            </div>
+
+
+            <div>
+
+                <label class="form-label">
+                    Description complète
+                </label>
+
+                <textarea
+                    name="description"
+                    rows="6"
+                    class="form-input"
+                ></textarea>
+
+            </div>
+
+
+            <div>
+
+                <label class="form-label">
+                    Technologies
+                </label>
+
+                <input
+                    type="text"
+                    name="technologies"
+                    placeholder="Python, Django, PostgreSQL..."
+                    class="form-input"
+                >
+
+            </div>
+
+
+            <div>
+
+                <label class="form-label">
+                    Lien GitHub
+                </label>
+
+                <input
+                    type="url"
+                    name="github_url"
+                    placeholder="https://github.com/..."
+                    class="form-input"
+                >
+
+            </div>
+
+
+            <div>
+
+                <label class="form-label">
+                    Lien démo
+                </label>
+
+                <input
+                    type="url"
+                    name="demo_url"
+                    placeholder="https://..."
+                    class="form-input"
+                >
+
+            </div>
+
+
+            <div class="flex gap-6">
+
+                <label class="flex items-center gap-2">
+
+                    <input
+                        type="checkbox"
+                        name="featured"
+                        checked
+                    >
+
+                    Projet à la une
+
+                </label>
+
+
+                <label class="flex items-center gap-2">
+
+                    <input
+                        type="checkbox"
+                        name="is_active"
+                        checked
+                    >
+
+                    Actif
+
+                </label>
+
+            </div>
+
+
+            <div class="flex justify-end gap-3">
+
+                <button
+                    type="button"
+                    onclick="closeModal('createProjectModal')"
+                    class="rounded-xl bg-white/10 px-5 py-3"
+                >
+                    Annuler
+                </button>
+
+
+                <button
+                    type="submit"
+                    class="rounded-xl bg-cyan-400 px-5 py-3 font-bold text-slate-950"
+                >
+                    Ajouter
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     MODALE : AJOUTER COMPETENCE
+========================================================= -->
+
+<div
+    id="createSkillModal"
+    class="modal fixed inset-0 z-[100] hidden items-center justify-center bg-black/70 p-4"
+>
+
+    <div class="w-full max-w-2xl rounded-2xl bg-slate-900 p-6">
+
+        <div class="mb-6 flex justify-between">
+
+            <h3 class="text-2xl font-black">
+                Ajouter une compétence
+            </h3>
+
+            <button
+                type="button"
+                onclick="closeModal('createSkillModal')"
+                class="text-2xl"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <form
+            method="POST"
+            action="{% url 'users:skill-create' %}"
+            class="space-y-5"
+        >
+
+            {% csrf_token %}
+
+
+            <div>
+
+                <label class="form-label">
+                    Nom
+                </label>
+
+                <input
+                    type="text"
+                    name="name"
+                    required
+                    class="form-input"
+                >
+
+            </div>
+
+
+            <div>
+
+                <label class="form-label">
+                    Catégorie
+                </label>
+
+                <select
+                    name="category"
+                    class="form-input"
+                >
+
+                    <option value="backend">
+                        Backend
+                    </option>
+
+                    <option value="frontend">
+                        Frontend
+                    </option>
+
+                    <option value="database">
+                        Base de données
+                    </option>
+
+                    <option value="tools">
+                        Outils
+                    </option>
+
+                    <option value="other">
+                        Autre
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div>
+
+                <label class="form-label">
+                    Niveau (%)
+                </label>
+
+                <input
+                    type="number"
+                    name="percentage"
+                    min="0"
+                    max="100"
+                    value="80"
+                    class="form-input"
+                >
+
+            </div>
+
+
+            <div>
+
+                <label class="form-label">
+                    Icône
+                </label>
+
+                <input
+                    type="text"
+                    name="icon"
+                    placeholder="fa-brands fa-python"
+                    class="form-input"
+                >
+
+            </div>
+
+
+            <div>
+
+                <label class="form-label">
+                    Description
+                </label>
+
+                <textarea
+                    name="description"
+                    rows="4"
+                    class="form-input"
+                ></textarea>
+
+            </div>
+
+
+            <div>
+
+                <label class="form-label">
+                    Ordre
+                </label>
+
+                <input
+                    type="number"
+                    name="order"
+                    value="0"
+                    class="form-input"
+                >
+
+            </div>
+
+
+            <label class="flex items-center gap-2">
+
+                <input
+                    type="checkbox"
+                    name="is_active"
+                    checked
+                >
+
+                Actif
+
+            </label>
+
+
+            <div class="flex justify-end gap-3">
+
+                <button
+                    type="button"
+                    onclick="closeModal('createSkillModal')"
+                    class="rounded-xl bg-white/10 px-5 py-3"
+                >
+                    Annuler
+                </button>
+
+
+                <button
+                    type="submit"
+                    class="rounded-xl bg-cyan-400 px-5 py-3 font-bold text-slate-950"
+                >
+                    Ajouter
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     MODALE : AJOUTER EXPERIENCE
+========================================================= -->
+
+<div
+    id="createExperienceModal"
+    class="modal fixed inset-0 z-[100] hidden items-center justify-center bg-black/70 p-4"
+>
+
+    <div class="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl bg-slate-900 p-6">
+
+        <div class="mb-6 flex justify-between">
+
+            <h3 class="text-2xl font-black">
+                Ajouter une expérience
+            </h3>
+
+            <button
+                type="button"
+                onclick="closeModal('createExperienceModal')"
+                class="text-2xl"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <form
+            method="POST"
+            action="{% url 'users:experience-create' %}"
+            class="space-y-5"
+        >
+
+            {% csrf_token %}
+
+
+            <div>
+
+                <label class="form-label">
+                    Entreprise
+                </label>
+
+                <input
+                    type="text"
+                    name="company"
+                    required
+                    class="form-input"
+                >
+
+            </div>
+
+
+            <div>
+
+                <label class="form-label">
+                    Poste
+                </label>
+
+                <input
+                    type="text"
+                    name="position"
+                    required
+                    class="form-input"
+                >
+
+            </div>
+
+
+            <div>
+
+                <label class="form-label">
+                    Description
+                </label>
+
+                <textarea
+                    name="description"
+                    rows="5"
+                    class="form-input"
+                ></textarea>
+
+            </div>
+
+
+            <div class="grid gap-5 sm:grid-cols-2">
+
+                <div>
+
+                    <label class="form-label">
+                        Date de début
+                    </label>
+
+                    <input
+                        type="date"
+                        name="start_date"
+                        class="form-input"
+                    >
+
+                </div>
+
+
+                <div>
+
+                    <label class="form-label">
+                        Date de fin
+                    </label>
+
+                    <input
+                        type="date"
+                        name="end_date"
+                        class="form-input"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div>
+
+                <label class="form-label">
+                    Localisation
+                </label>
+
+                <input
+                    type="text"
+                    name="location"
+                    class="form-input"
+                >
+
+            </div>
+
+
+            <div>
+
+                <label class="form-label">
+                    Ordre
+                </label>
+
+                <input
+                    type="number"
+                    name="order"
+                    value="0"
+                    class="form-input"
+                >
+
+            </div>
+
+
+            <label class="flex items-center gap-2">
+
+                <input
+                    type="checkbox"
+                    name="is_current"
+                >
+
+                Poste actuel
+
+            </label>
+
+
+            <div class="flex justify-end gap-3">
+
+                <button
+                    type="button"
+                    onclick="closeModal('createExperienceModal')"
+                    class="rounded-xl bg-white/10 px-5 py-3"
+                >
+                    Annuler
+                </button>
+
+
+                <button
+                    type="submit"
+                    class="rounded-xl bg-cyan-400 px-5 py-3 font-bold text-slate-950"
+                >
+                    Ajouter
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     MODALES PROJETS
+========================================================= -->
+
+{% for project in projects %}
+
+
+<!-- VOIR -->
+
+<div
+    id="viewProject{{ project.id }}"
+    class="modal fixed inset-0 z-[100] hidden items-center justify-center bg-black/70 p-4 backdrop-blur-sm"
+>
+
+    <div class="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-2xl bg-slate-900 p-6">
+
+        <div class="mb-6 flex justify-between">
+
+            <h3 class="text-2xl font-black">
+                {{ project.title }}
+            </h3>
+
+            <button
+                type="button"
+                onclick="closeModal('viewProject{{ project.id }}')"
+                class="text-2xl"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        {% if project.image %}
+
+            <img
+                src="{{ project.image.url }}"
+                alt="{{ project.title }}"
+                class="mb-6 max-h-80 w-full rounded-xl object-cover"
+            >
+
+        {% endif %}
+
+
+        <div class="space-y-5">
+
+            <div>
+
+                <h4 class="font-bold text-cyan-400">
+                    Description courte
+                </h4>
+
+                <p class="mt-2">
+                    {{ project.short_description|default:"Aucune description." }}
+                </p>
+
+            </div>
+
+
+            <div>
+
+                <h4 class="font-bold text-cyan-400">
+                    Description
+                </h4>
+
+                <p class="mt-2 whitespace-pre-line">
+                    {{ project.description|default:"Aucune description." }}
+                </p>
+
+            </div>
+
+
+            <div>
+
+                <h4 class="font-bold text-cyan-400">
+                    Technologies
+                </h4>
+
+                <p class="mt-2">
+                    {{ project.technologies|default:"-" }}
+                </p>
+
+            </div>
+
+
+            <div class="flex flex-wrap gap-3">
+
+                {% if project.github_url %}
+
+                    <a
+                        href="{{ project.github_url }}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="rounded-xl bg-white/10 px-4 py-3 text-sm font-semibold"
+                    >
+                        GitHub
+                    </a>
+
+                {% endif %}
+
+
+                {% if project.demo_url %}
+
+                    <a
+                        href="{{ project.demo_url }}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="rounded-xl bg-cyan-400 px-4 py-3 text-sm font-bold text-slate-950"
+                    >
+                        Voir la démo
+                    </a>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- MODIFIER -->
+
+<div
+    id="editProject{{ project.id }}"
+    class="modal fixed inset-0 z-[100] hidden items-center justify-center bg-black/70 p-4 backdrop-blur-sm"
+>
+
+    <div class="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-2xl bg-slate-900 p-6">
+
+        <div class="mb-6 flex justify-between">
+
+            <h3 class="text-2xl font-black">
+                Modifier le projet
+            </h3>
+
+            <button
+                type="button"
+                onclick="closeModal('editProject{{ project.id }}')"
+                class="text-2xl"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <form
+            method="POST"
+            action="{% url 'users:project-update' project.id %}"
+            enctype="multipart/form-data"
+            class="space-y-5"
+        >
+
+            {% csrf_token %}
+
+
+            <input
+                type="text"
+                name="title"
+                value="{{ project.title }}"
+                required
+                class="form-input"
+            >
+
+
+            {% if project.image %}
+
+                <img
+                    src="{{ project.image.url }}"
+                    class="h-32 w-48 rounded-xl object-cover"
+                    alt="{{ project.title }}"
+                >
+
+            {% endif %}
+
+
+            <input
+                type="file"
+                name="image"
+                accept="image/*"
+                class="form-input"
+            >
+
+
+            <textarea
+                name="short_description"
+                rows="3"
+                class="form-input"
+            >{{ project.short_description }}</textarea>
+
+
+            <textarea
+                name="description"
+                rows="6"
+                class="form-input"
+            >{{ project.description }}</textarea>
+
+
+            <input
+                type="text"
+                name="technologies"
+                value="{{ project.technologies }}"
+                class="form-input"
+            >
+
+
+            <input
+                type="url"
+                name="github_url"
+                value="{{ project.github_url }}"
+                class="form-input"
+            >
+
+
+            <input
+                type="url"
+                name="demo_url"
+                value="{{ project.demo_url }}"
+                class="form-input"
+            >
+
+
+            <div class="flex gap-6">
+
+                <label class="flex items-center gap-2">
+
+                    <input
+                        type="checkbox"
+                        name="featured"
+                        {% if project.featured %}checked{% endif %}
+                    >
+
+                    À la une
+
+                </label>
+
+
+                <label class="flex items-center gap-2">
+
+                    <input
+                        type="checkbox"
+                        name="is_active"
+                        {% if project.is_active %}checked{% endif %}
+                    >
+
+                    Actif
+
+                </label>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="w-full rounded-xl bg-cyan-400 py-3 font-bold text-slate-950"
+            >
+                Enregistrer les modifications
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- SUPPRIMER -->
+
+<div
+    id="deleteProject{{ project.id }}"
+    class="modal fixed inset-0 z-[100] hidden items-center justify-center bg-black/70 p-4 backdrop-blur-sm"
+>
+
+    <div class="w-full max-w-md rounded-2xl bg-slate-900 p-6">
+
+        <h3 class="text-xl font-black">
+            Supprimer le projet ?
+        </h3>
+
+
+        <p class="mt-3">
+            Voulez-vous vraiment supprimer
+            <strong>
+                {{ project.title }}
+            </strong> ?
+        </p>
+
+
+        <form
+            method="POST"
+            action="{% url 'users:project-delete' project.id %}"
+            class="mt-6 flex justify-end gap-3"
+        >
+
+            {% csrf_token %}
+
+
+            <button
+                type="button"
+                onclick="closeModal('deleteProject{{ project.id }}')"
+                class="rounded-xl bg-white/10 px-5 py-3"
+            >
+                Annuler
+            </button>
+
+
+            <button
+                type="submit"
+                class="rounded-xl bg-red-500 px-5 py-3 font-bold"
+            >
+                Supprimer
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+{% endfor %}
+
+
+<!-- =========================================================
+     MODALES COMPETENCES
+========================================================= -->
+
+{% for skill in skills %}
+
+
+<!-- VOIR -->
+
+<div
+    id="viewSkill{{ skill.id }}"
+    class="modal fixed inset-0 z-[100] hidden items-center justify-center bg-black/70 p-4"
+>
+
+    <div class="w-full max-w-lg rounded-2xl bg-slate-900 p-6">
+
+        <div class="flex justify-between">
+
+            <h3 class="text-2xl font-black">
+                {{ skill.name }}
+            </h3>
+
+            <button
+                type="button"
+                onclick="closeModal('viewSkill{{ skill.id }}')"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="mt-6 space-y-4">
+
+            <p>
+                <strong>Catégorie :</strong>
+                {{ skill.get_category_display }}
+            </p>
+
+            <p>
+                <strong>Niveau :</strong>
+                {{ skill.percentage }}%
+            </p>
+
+            <p>
+                <strong>Icône :</strong>
+                {{ skill.icon|default:"-" }}
+            </p>
+
+            <p>
+                <strong>Description :</strong><br>
+                {{ skill.description|default:"Aucune description." }}
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- MODIFIER -->
+
+<div
+    id="editSkill{{ skill.id }}"
+    class="modal fixed inset-0 z-[100] hidden items-center justify-center bg-black/70 p-4"
+>
+
+    <div class="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl bg-slate-900 p-6">
+
+        <div class="mb-6 flex justify-between">
+
+            <h3 class="text-2xl font-black">
+                Modifier la compétence
+            </h3>
+
+            <button
+                type="button"
+                onclick="closeModal('editSkill{{ skill.id }}')"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <form
+            method="POST"
+            action="{% url 'users:skill-update' skill.id %}"
+            class="space-y-5"
+        >
+
+            {% csrf_token %}
+
+
+            <input
+                type="text"
+                name="name"
+                value="{{ skill.name }}"
+                required
+                class="form-input"
+            >
+
+
+            <select
+                name="category"
+                class="form-input"
+            >
+
+                <option value="backend" {% if skill.category == "backend" %}selected{% endif %}>
+                    Backend
+                </option>
+
+                <option value="frontend" {% if skill.category == "frontend" %}selected{% endif %}>
+                    Frontend
+                </option>
+
+                <option value="database" {% if skill.category == "database" %}selected{% endif %}>
+                    Base de données
+                </option>
+
+                <option value="tools" {% if skill.category == "tools" %}selected{% endif %}>
+                    Outils
+                </option>
+
+                <option value="other" {% if skill.category == "other" %}selected{% endif %}>
+                    Autre
+                </option>
+
+            </select>
+
+
+            <input
+                type="number"
+                name="percentage"
+                min="0"
+                max="100"
+                value="{{ skill.percentage }}"
+                class="form-input"
+            >
+
+
+            <input
+                type="text"
+                name="icon"
+                value="{{ skill.icon }}"
+                class="form-input"
+            >
+
+
+            <textarea
+                name="description"
+                rows="5"
+                class="form-input"
+            >{{ skill.description }}</textarea>
+
+
+            <input
+                type="number"
+                name="order"
+                value="{{ skill.order }}"
+                class="form-input"
+            >
+
+
+            <label class="flex items-center gap-2">
+
+                <input
+                    type="checkbox"
+                    name="is_active"
+                    {% if skill.is_active %}checked{% endif %}
+                >
+
+                Actif
+
+            </label>
+
+
+            <button
+                type="submit"
+                class="w-full rounded-xl bg-cyan-400 py-3 font-bold text-slate-950"
+            >
+                Enregistrer
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- SUPPRIMER -->
+
+<div
+    id="deleteSkill{{ skill.id }}"
+    class="modal fixed inset-0 z-[100] hidden items-center justify-center bg-black/70 p-4"
+>
+
+    <div class="w-full max-w-md rounded-2xl bg-slate-900 p-6">
+
+        <h3 class="text-xl font-black">
+            Supprimer cette compétence ?
+        </h3>
+
+        <p class="mt-3">
+            Cette action est irréversible.
+        </p>
+
+
+        <form
+            method="POST"
+            action="{% url 'users:skill-delete' skill.id %}"
+            class="mt-6 flex justify-end gap-3"
+        >
+
+            {% csrf_token %}
+
+
+            <button
+                type="button"
+                onclick="closeModal('deleteSkill{{ skill.id }}')"
+                class="rounded-xl bg-white/10 px-5 py-3"
+            >
+                Annuler
+            </button>
+
+
+            <button
+                type="submit"
+                class="rounded-xl bg-red-500 px-5 py-3 font-bold"
+            >
+                Supprimer
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+{% endfor %}
+
+
+<!-- =========================================================
+     MODALES EXPERIENCES
+========================================================= -->
+
+{% for experience in experiences %}
+
+
+<!-- VOIR -->
+
+<div
+    id="viewExperience{{ experience.id }}"
+    class="modal fixed inset-0 z-[100] hidden items-center justify-center bg-black/70 p-4"
+>
+
+    <div class="w-full max-w-lg rounded-2xl bg-slate-900 p-6">
+
+        <div class="flex justify-between">
+
+            <h3 class="text-2xl font-black">
+                {{ experience.position }}
+            </h3>
+
+            <button
+                type="button"
+                onclick="closeModal('viewExperience{{ experience.id }}')"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="mt-6 space-y-4">
+
+            <p>
+                <strong>Entreprise :</strong>
+                {{ experience.company }}
+            </p>
+
+            <p>
+                <strong>Localisation :</strong>
+                {{ experience.location|default:"-" }}
+            </p>
+
+            <p>
+                <strong>Description :</strong><br>
+                {{ experience.description|default:"-" }}
+            </p>
+
+
+            <p>
+
+                <strong>Période :</strong>
+
+                {% if experience.start_date %}
+                    {{ experience.start_date|date:"d/m/Y" }}
+                {% endif %}
+
+                -
+
+                {% if experience.is_current %}
+
+                    Aujourd'hui
+
+                {% elif experience.end_date %}
+
+                    {{ experience.end_date|date:"d/m/Y" }}
+
+                {% endif %}
+
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- MODIFIER -->
+
+<div
+    id="editExperience{{ experience.id }}"
+    class="modal fixed inset-0 z-[100] hidden items-center justify-center bg-black/70 p-4"
+>
+
+    <div class="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl bg-slate-900 p-6">
+
+        <div class="mb-6 flex justify-between">
+
+            <h3 class="text-2xl font-black">
+                Modifier l'expérience
+            </h3>
+
+            <button
+                type="button"
+                onclick="closeModal('editExperience{{ experience.id }}')"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <form
+            method="POST"
+            action="{% url 'users:experience-update' experience.id %}"
+            class="space-y-5"
+        >
+
+            {% csrf_token %}
+
+
+            <input
+                type="text"
+                name="company"
+                value="{{ experience.company }}"
+                required
+                class="form-input"
+                placeholder="Entreprise"
+            >
+
+
+            <input
+                type="text"
+                name="position"
+                value="{{ experience.position }}"
+                required
+                class="form-input"
+                placeholder="Poste"
+            >
+
+
+            <textarea
+                name="description"
+                rows="5"
+                class="form-input"
+            >{{ experience.description }}</textarea>
+
+
+            <div class="grid gap-5 sm:grid-cols-2">
+
+                <input
+                    type="date"
+                    name="start_date"
+                    value="{{ experience.start_date|date:'Y-m-d' }}"
+                    class="form-input"
+                >
+
+
+                <input
+                    type="date"
+                    name="end_date"
+                    value="{{ experience.end_date|date:'Y-m-d' }}"
+                    class="form-input"
+                >
+
+            </div>
+
+
+            <input
+                type="text"
+                name="location"
+                value="{{ experience.location }}"
+                class="form-input"
+                placeholder="Localisation"
+            >
+
+
+            <input
+                type="number"
+                name="order"
+                value="{{ experience.order }}"
+                class="form-input"
+            >
+
+
+            <label class="flex items-center gap-2">
+
+                <input
+                    type="checkbox"
+                    name="is_current"
+                    {% if experience.is_current %}checked{% endif %}
+                >
+
+                Poste actuel
+
+            </label>
+
+
+            <button
+                type="submit"
+                class="w-full rounded-xl bg-cyan-400 py-3 font-bold text-slate-950"
+            >
+                Enregistrer
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- SUPPRIMER -->
+
+<div
+    id="deleteExperience{{ experience.id }}"
+    class="modal fixed inset-0 z-[100] hidden items-center justify-center bg-black/70 p-4"
+>
+
+    <div class="w-full max-w-md rounded-2xl bg-slate-900 p-6">
+
+        <h3 class="text-xl font-black">
+            Supprimer cette expérience ?
+        </h3>
+
+
+        <p class="mt-3">
+            Cette action est irréversible.
+        </p>
+
+
+        <form
+            method="POST"
+            action="{% url 'users:experience-delete' experience.id %}"
+            class="mt-6 flex justify-end gap-3"
+        >
+
+            {% csrf_token %}
+
+
+            <button
+                type="button"
+                onclick="closeModal('deleteExperience{{ experience.id }}')"
+                class="rounded-xl bg-white/10 px-5 py-3"
+            >
+                Annuler
+            </button>
+
+
+            <button
+                type="submit"
+                class="rounded-xl bg-red-500 px-5 py-3 font-bold"
+            >
+                Supprimer
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+{% endfor %}
+
+
+<!-- =========================================================
+     JAVASCRIPT
+========================================================= -->
+
+<script>
+
+    /* =====================================================
+       SIDEBAR MOBILE
+    ====================================================== */
+
+    const toggle = document.getElementById("sidebarToggle");
+    const layout = document.querySelector(".dashboard-layout");
+
+    if (toggle) {
+
+        toggle.addEventListener("click", () => {
+
+            layout.classList.toggle("sidebar-open");
+
+        });
+
+    }
+
+
+    /* =====================================================
+       OUVRIR UNE MODALE
+    ====================================================== */
+
+    function openModal(id) {
+
+        const modal = document.getElementById(id);
+
+        if (!modal) {
+            return;
+        }
+
+        modal.classList.remove("hidden");
+        modal.classList.add("flex");
+
+        document.body.classList.add("modal-open");
+
+    }
+
+
+    /* =====================================================
+       FERMER UNE MODALE
+    ====================================================== */
+
+    function closeModal(id) {
+
+        const modal = document.getElementById(id);
+
+        if (!modal) {
+            return;
+        }
+
+        modal.classList.add("hidden");
+        modal.classList.remove("flex");
+
+        document.body.classList.remove("modal-open");
+
+    }
+
+
+    /* =====================================================
+       FERMER EN CLIQUANT SUR L'ARRIERE-PLAN
+    ====================================================== */
+
+    document.addEventListener("click", function(event) {
+
+        if (event.target.classList.contains("modal")) {
+
+            event.target.classList.add("hidden");
+            event.target.classList.remove("flex");
+
+            document.body.classList.remove("modal-open");
+
+        }
+
+    });
+
+
+    /* =====================================================
+       FERMER AVEC LA TOUCHE ESC
+    ====================================================== */
+
+    document.addEventListener("keydown", function(event) {
+
+        if (event.key !== "Escape") {
+            return;
+        }
+
+        document.querySelectorAll(".modal").forEach(function(modal) {
+
+            modal.classList.add("hidden");
+            modal.classList.remove("flex");
+
+        });
+
+        document.body.classList.remove("modal-open");
+
+    });
+
+</script>
+
+</body>
+</html>

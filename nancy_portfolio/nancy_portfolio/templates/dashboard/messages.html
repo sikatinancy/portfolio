@@ -1,0 +1,258 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Messages | Dashboard</title>
+
+     <link rel="stylesheet" href="{% static 'css/output.css' %}">
+
+</head>
+
+
+<body class="dashboard-body">
+
+<div class="dashboard-layout">
+
+
+    <!-- SIDEBAR -->
+
+    <aside class="dashboard-sidebar">
+
+        <div class="sidebar-brand">
+
+            <div class="brand-logo">
+                N
+            </div>
+
+            <div>
+                <h1>Portfolio</h1>
+                <span>Administration</span>
+            </div>
+
+        </div>
+
+
+        <nav class="sidebar-nav">
+
+            <a href="{% url 'users:dashboard' %}"
+               class="sidebar-link">
+
+                <span>⌂</span>
+                Dashboard
+
+            </a>
+
+
+            <a href="{% url 'users:dashboard-profile' %}"
+               class="sidebar-link">
+
+                <span>◉</span>
+                Mon profil
+
+            </a>
+
+
+            <a href="{% url 'users:messages' %}"
+               class="sidebar-link active">
+
+                <span>✉</span>
+                Messages
+
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-bottom">
+
+            <a href="{% url 'portfolio:home' %}"
+               class="sidebar-link">
+
+                ↗ Voir le portfolio
+
+            </a>
+
+
+            <a href="{% url 'users:logout' %}"
+               class="sidebar-link logout-link">
+
+                ⇥ Déconnexion
+
+            </a>
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- MAIN -->
+
+    <main class="dashboard-main">
+
+
+        <header class="dashboard-header">
+
+            <div>
+
+                <p class="dashboard-header-small">
+                    MESSAGERIE
+                </p>
+
+                <h2>
+                    Messages des visiteurs
+                </h2>
+
+            </div>
+
+        </header>
+
+
+
+        <section class="dashboard-content">
+
+
+            <div class="page-introduction">
+
+                <span>COMMUNICATION</span>
+
+                <h3>
+                    Toutes les conversations
+                </h3>
+
+                <p>
+                    Gérez ici les messages reçus depuis
+                    votre portfolio.
+                </p>
+
+            </div>
+
+
+
+            <div class="messages-layout">
+
+
+                <div class="conversation-panel">
+
+
+                    {% for conversation in conversations %}
+
+                        <a
+                            href="{% url 'users:chat' conversation.id %}"
+                            class="message-conversation">
+
+
+                            <div class="conversation-avatar">
+
+                                {{ conversation.visitor_name|first|upper }}
+
+                            </div>
+
+
+                            <div class="conversation-info">
+
+                                <div class="conversation-top">
+
+                                    <strong>
+                                        {{ conversation.visitor_name }}
+                                    </strong>
+
+                                    <small>
+                                        {{ conversation.updated_at|date:"d/m H:i" }}
+                                    </small>
+
+                                </div>
+
+
+                                <span>
+
+                                    {{ conversation.subject|default:"Sans sujet" }}
+
+                                </span>
+
+
+                                {% with last_message=conversation.messages.last %}
+
+                                    {% if last_message %}
+
+                                        <p>
+                                            {{ last_message.content|truncatechars:70 }}
+                                        </p>
+
+                                    {% endif %}
+
+                                {% endwith %}
+
+
+                            </div>
+
+                        </a>
+
+
+                    {% empty %}
+
+
+                        <div class="empty-state">
+
+                            <div class="empty-icon">
+                                ✉
+                            </div>
+
+                            <h4>
+                                Aucune conversation
+                            </h4>
+
+                            <p>
+                                Aucun visiteur ne vous a encore envoyé
+                                de message.
+                            </p>
+
+                        </div>
+
+
+                    {% endfor %}
+
+
+                </div>
+
+
+
+                <div class="message-placeholder">
+
+                    <div class="message-placeholder-icon">
+                        ✉
+                    </div>
+
+                    <h3>
+                        Sélectionnez une conversation
+                    </h3>
+
+                    <p>
+                        Choisissez une conversation à gauche
+                        pour consulter les messages.
+                    </p>
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+</div>
+
+</body>
+
+</html>

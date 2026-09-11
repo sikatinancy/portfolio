@@ -1,0 +1,7 @@
+# PostgreSQL
+# ------------------------------------------------------------------------------
+POSTGRES_HOST=postgres
+POSTGRES_PORT=5432
+POSTGRES_DB=nancy_portfolio
+POSTGRES_USER=KqNSgBQKAGnfMPXZrPTBnFWhjGWujeyk
+POSTGRES_PASSWORD=4AmmAO2DZqDC6FkzUv2T2XJl5EJ8rSZZEfBtwRNvhLEm5Jm1p7LvTgIlJmDKx3MS

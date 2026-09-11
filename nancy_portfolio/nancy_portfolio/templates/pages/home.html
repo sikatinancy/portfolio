@@ -1,0 +1,274 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {{ profile.full_name|default:"Nancy Melissa" }} — Portfolio
+{% endblock %}
+
+{% block content %}
+
+<section
+    id="home"
+    class="hero-section"
+>
+
+    <div class="hero-glow hero-glow-one"></div>
+    <div class="hero-glow hero-glow-two"></div>
+
+    <div
+        class="relative mx-auto grid min-h-screen max-w-7xl items-center gap-16 px-6 py-32 lg:grid-cols-2 lg:px-8"
+    >
+
+        <div class="reveal">
+
+            <p class="mb-5 text-sm font-semibold uppercase tracking-[0.3em] text-cyan-400">
+                Bonjour, je suis
+            </p>
+
+            <h1 class="text-5xl font-black leading-tight text-white sm:text-6xl lg:text-7xl">
+
+                {{ profile.full_name|default:"Nancy Melissa" }}
+
+            </h1>
+
+            <h2 class="mt-5 text-2xl font-bold text-slate-300 sm:text-3xl">
+
+                {{ profile.profession|default:"Développeuse Python & Django" }}
+
+            </h2>
+
+            <p class="mt-6 max-w-2xl text-lg leading-8 text-slate-400">
+
+                {{ profile.short_description|default:"Je conçois des applications web modernes, performantes et évolutives avec Python et Django." }}
+
+            </p>
+
+            <div class="mt-10 flex flex-wrap gap-4">
+
+                <a
+                    href="{% url 'portfolio:projects' %}"
+                    class="btn-primary"
+                >
+                    Voir mes projets
+                </a>
+
+                <a
+                    href="{% url 'portfolio:contact' %}"
+                    class="btn-secondary"
+                >
+                    Me contacter
+                </a>
+
+            </div>
+
+        </div>
+
+        <div class="relative flex justify-center reveal">
+
+            <div class="profile-orbit"></div>
+
+            {% if profile.profile_image %}
+
+                <img
+                    src="{{ profile.profile_image.url }}"
+                    alt="{{ profile.full_name }}"
+                    class="profile-image"
+                >
+
+            {% else %}
+
+                <div class="profile-placeholder">
+                    NM
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<section class="section">
+
+    <div class="section-container">
+
+        <div class="section-heading reveal">
+
+            <span class="section-kicker">
+                À propos
+            </span>
+
+            <h2 class="section-title">
+                Construire des solutions qui ont du sens.
+            </h2>
+
+            <p class="section-description">
+                Je transforme des idées en applications web robustes,
+                modernes et faciles à maintenir.
+            </p>
+
+        </div>
+
+        {% if profile %}
+
+        <div class="mt-16 grid gap-10 lg:grid-cols-2">
+
+            <div class="glass-card reveal">
+
+                <h3 class="text-2xl font-bold text-white">
+                    Qui suis-je ?
+                </h3>
+
+                <p class="mt-5 leading-8 text-slate-400">
+                    {{ profile.biography|truncatewords:100 }}
+                </p>
+
+                <a
+                    href="{% url 'portfolio:about' %}"
+                    class="mt-6 inline-block text-cyan-400 hover:text-cyan-300"
+                >
+                    En savoir plus →
+                </a>
+
+            </div>
+
+            <div class="glass-card reveal">
+
+                <h3 class="text-2xl font-bold text-white">
+                    Mes domaines
+                </h3>
+
+                <div class="mt-6 grid gap-4 sm:grid-cols-2">
+
+                    <div class="skill-mini">
+                        Python
+                    </div>
+
+                    <div class="skill-mini">
+                        Django
+                    </div>
+
+                    <div class="skill-mini">
+                        PostgreSQL
+                    </div>
+
+                    <div class="skill-mini">
+                        JavaScript
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+
+<section class="section bg-slate-900/40">
+
+    <div class="section-container">
+
+        <div class="section-heading reveal">
+
+            <span class="section-kicker">
+                Portfolio
+            </span>
+
+            <h2 class="section-title">
+                Quelques réalisations
+            </h2>
+
+        </div>
+
+        <div class="mt-14 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+
+            {% for project in featured_projects %}
+
+                {% include "pages/project-card.html" with project=project %}
+
+            {% empty %}
+
+                <p class="text-slate-400">
+                    Aucun projet n'est encore disponible.
+                </p>
+
+            {% endfor %}
+
+        </div>
+
+        <div class="mt-12 text-center">
+
+            <a
+                href="{% url 'portfolio:projects' %}"
+                class="btn-secondary"
+            >
+                Voir tous les projets
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<section class="section">
+
+    <div class="section-container">
+
+        <div class="section-heading reveal">
+
+            <span class="section-kicker">
+                Compétences
+            </span>
+
+            <h2 class="section-title">
+                Mon expertise technique
+            </h2>
+
+        </div>
+
+        <div class="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+
+            {% for skill in skills %}
+
+                <div class="glass-card reveal">
+
+                    <div class="flex items-center justify-between">
+
+                        <h3 class="font-bold text-white">
+                            {{ skill.name }}
+                        </h3>
+
+                        <span class="text-cyan-400">
+                            {{ skill.percentage }}%
+                        </span>
+
+                    </div>
+
+                    <div class="mt-4 h-2 overflow-hidden rounded-full bg-slate-800">
+
+                        <div
+                            class="skill-progress"
+                            style="width: {{ skill.percentage }}%;"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

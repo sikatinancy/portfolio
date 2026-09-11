@@ -1,0 +1,110 @@
+
+{% load static %}
+
+<header
+    id="site-header"
+    class="fixed top-0 left-0 z-50 w-full border-b border-white/10 bg-slate-950/80 backdrop-blur-xl"
+>
+    <nav
+        class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-8"
+    >
+
+        <!-- LOGO -->
+        <a
+            href="{% url 'portfolio:home' %}"
+            class="text-2xl font-black tracking-tight text-white"
+        >
+            Nancy<span class="text-cyan-400">.</span>
+        </a>
+
+
+        <!-- BOUTON MENU MOBILE -->
+        <button
+            id="mobile-menu-button"
+            type="button"
+            class="rounded-lg p-2 text-gray-300 hover:bg-white/10 lg:hidden"
+            aria-label="Ouvrir le menu"
+        >
+            ☰
+        </button>
+
+
+        <!-- MENU -->
+        <div
+            id="mobile-menu"
+            class="hidden absolute top-full left-0 w-full border-b border-white/10 bg-slate-950 px-6 py-6 lg:static lg:block lg:w-auto lg:border-0 lg:bg-transparent lg:p-0"
+        >
+
+            <div
+                class="flex flex-col gap-5 lg:flex-row lg:items-center lg:gap-8"
+            >
+
+                <!-- ACCUEIL -->
+                <a
+                    href="{% url 'portfolio:home' %}"
+                    class="nav-link"
+                >
+                    Accueil
+                </a>
+
+
+                <!-- À PROPOS -->
+                <a
+                    href="{% url 'portfolio:about' %}"
+                    class="nav-link"
+                >
+                    À propos
+                </a>
+
+
+                <!-- PROJETS -->
+                <a
+                    href="{% url 'portfolio:projects' %}"
+                    class="nav-link"
+                >
+                    Projets
+                </a>
+
+
+                <!-- COMPÉTENCES -->
+                <a
+                    href="{% url 'portfolio:skills' %}"
+                    class="nav-link"
+                >
+                    Compétences
+                </a>
+
+
+                <!-- EXPÉRIENCES -->
+                <a
+                    href="{% url 'portfolio:experiences' %}"
+                    class="nav-link"
+                >
+                    Expériences
+                </a>
+
+
+                <!-- CONTACT -->
+                <a
+                    href="{% url 'portfolio:contact' %}"
+                    class="rounded-full bg-cyan-400 px-5 py-2.5 font-semibold text-slate-950 transition hover:bg-cyan-300"
+                >
+                    Contact
+                </a>
+
+
+                <!-- CONNEXION ADMIN -->
+                <a
+                    href="{% url 'users:login' %}"
+                    class="rounded-full border border-cyan-400/40 px-5 py-2.5 font-semibold text-cyan-400 transition hover:bg-cyan-400 hover:text-slate-950"
+                >
+                    Admin
+                </a>
+
+            </div>
+
+        </div>
+
+    </nav>
+</header>
+

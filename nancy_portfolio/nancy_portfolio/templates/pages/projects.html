@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Projets — Nancy Melissa
+{% endblock %}
+
+{% block content %}
+
+<section class="page-hero">
+
+    <div class="section-container">
+
+        <span class="section-kicker">
+            Portfolio
+        </span>
+
+        <h1 class="page-title">
+            Mes projets
+        </h1>
+
+        <p class="page-description">
+            Découvrez les projets que j'ai réalisés.
+        </p>
+
+    </div>
+
+</section>
+
+
+<section class="section">
+
+    <div class="section-container">
+
+        <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+
+            {% for project in projects %}
+
+                {% include "includes/project-card.html" with project=project %}
+
+            {% empty %}
+
+                <div class="empty-state">
+                    Aucun projet disponible.
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

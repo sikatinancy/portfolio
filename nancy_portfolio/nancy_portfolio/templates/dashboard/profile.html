@@ -1,0 +1,390 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Mon profil | Dashboard</title>
+
+    <link rel="stylesheet" href="{% static 'css/output.css' %}">
+</head>
+
+<body class="dashboard-body">
+
+<div class="dashboard-layout">
+
+    <aside class="dashboard-sidebar">
+
+        <div class="sidebar-brand">
+            <div class="brand-logo">N</div>
+
+            <div>
+                <h1>Portfolio</h1>
+                <span>Administration</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+
+            <a href="{% url 'users:dashboard' %}"
+               class="sidebar-link">
+                <span>⌂</span>
+                Dashboard
+            </a>
+
+            <a href="{% url 'users:dashboard-profile' %}"
+               class="sidebar-link active">
+                <span>◉</span>
+                Mon profil
+            </a>
+
+            <a href="{% url 'users:messages' %}"
+               class="sidebar-link">
+                <span>✉</span>
+                Messages
+            </a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <a href="{% url 'portfolio:home' %}"
+               class="sidebar-link">
+                ↗ Voir le portfolio
+            </a>
+
+            <a href="{% url 'users:logout' %}"
+               class="sidebar-link logout-link">
+                ⇥ Déconnexion
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <main class="dashboard-main">
+
+        <header class="dashboard-header">
+
+            <div>
+                <p class="dashboard-header-small">
+                    ADMINISTRATION
+                </p>
+
+                <h2>
+                    Mon profil
+                </h2>
+            </div>
+
+        </header>
+
+
+        <section class="dashboard-content">
+
+            <div class="page-introduction">
+
+                <span>PROFIL PROFESSIONNEL</span>
+
+                <h3>
+                    Informations personnelles
+                </h3>
+
+                <p>
+                    Toutes les informations enregistrées ici
+                    sont utilisées directement sur votre portfolio.
+                </p>
+
+            </div>
+
+
+            <form
+                method="POST"
+                enctype="multipart/form-data"
+                class="admin-form">
+
+                {% csrf_token %}
+
+
+                <div class="form-card">
+
+                    <div class="form-card-header">
+                        <h3>Identité</h3>
+                        <p>
+                            Présentez-vous professionnellement.
+                        </p>
+                    </div>
+
+
+                    <div class="profile-preview">
+
+                        {% if profile.profile_image %}
+
+                            <img
+                                src="{{ profile.profile_image.url }}"
+                                alt="{{ profile.full_name }}">
+
+                        {% else %}
+
+                            <div class="profile-placeholder">
+                                {{ profile.full_name|first|upper }}
+                            </div>
+
+                        {% endif %}
+
+                        <div>
+                            <label>
+                                Photo de profil
+                            </label>
+
+                            <input
+                                type="file"
+                                name="profile_image"
+                                accept="image/*">
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-grid">
+
+                        <div class="form-group">
+
+                            <label>
+                                Nom complet
+                            </label>
+
+                            <input
+                                type="text"
+                                name="full_name"
+                                value="{{ profile.full_name }}"
+                                required>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Titre professionnel
+                            </label>
+
+                            <input
+                                type="text"
+                                name="professional_title"
+                                value="{{ profile.professional_title }}"
+                                placeholder="Développeuse Python & Django">
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Biographie
+                        </label>
+
+                        <textarea
+                            name="biography"
+                            rows="7">{{ profile.biography }}</textarea>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-card">
+
+                    <div class="form-card-header">
+
+                        <h3>
+                            Coordonnées
+                        </h3>
+
+                        <p>
+                            Les informations permettant de vous contacter.
+                        </p>
+
+                    </div>
+
+
+                    <div class="form-grid">
+
+                        <div class="form-group">
+
+                            <label>Email</label>
+
+                            <input
+                                type="email"
+                                name="email"
+                                value="{{ profile.email }}">
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>Téléphone</label>
+
+                            <input
+                                type="text"
+                                name="phone"
+                                value="{{ profile.phone }}">
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>Localisation</label>
+
+                            <input
+                                type="text"
+                                name="location"
+                                value="{{ profile.location }}">
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-card">
+
+                    <div class="form-card-header">
+
+                        <h3>
+                            Réseaux professionnels
+                        </h3>
+
+                    </div>
+
+
+                    <div class="form-grid">
+
+                        <div class="form-group">
+                            <label>GitHub</label>
+
+                            <input
+                                type="url"
+                                name="github_url"
+                                value="{{ profile.github_url }}"
+                                placeholder="https://github.com/...">
+                        </div>
+
+
+                        <div class="form-group">
+                            <label>LinkedIn</label>
+
+                            <input
+                                type="url"
+                                name="linkedin_url"
+                                value="{{ profile.linkedin_url }}"
+                                placeholder="https://linkedin.com/in/...">
+                        </div>
+
+
+                        <div class="form-group">
+                            <label>Facebook</label>
+
+                            <input
+                                type="url"
+                                name="facebook_url"
+                                value="{{ profile.facebook_url }}">
+                        </div>
+
+
+                        <div class="form-group">
+                            <label>Instagram</label>
+
+                            <input
+                                type="url"
+                                name="instagram_url"
+                                value="{{ profile.instagram_url }}">
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-card">
+
+                    <div class="form-card-header">
+
+                        <h3>
+                            Documents
+                        </h3>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            CV
+                        </label>
+
+                        {% if profile.cv %}
+                            <p class="current-file">
+                                CV actuel :
+                                <a href="{{ profile.cv.url }}"
+                                   target="_blank">
+                                    Voir le CV
+                                </a>
+                            </p>
+                        {% endif %}
+
+                        <input
+                            type="file"
+                            name="cv"
+                            accept=".pdf,.doc,.docx">
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Image de couverture
+                        </label>
+
+                        <input
+                            type="file"
+                            name="cover_image"
+                            accept="image/*">
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-actions">
+
+                    <button
+                        type="submit"
+                        class="primary-button">
+
+                        Enregistrer les modifications
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+</html>

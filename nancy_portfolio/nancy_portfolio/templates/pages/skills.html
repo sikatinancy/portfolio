@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Compétences — Nancy Melissa
+{% endblock %}
+
+{% block content %}
+
+<section class="page-hero">
+
+    <div class="section-container">
+
+        <span class="section-kicker">
+            Expertise
+        </span>
+
+        <h1 class="page-title">
+            Mes compétences
+        </h1>
+
+    </div>
+
+</section>
+
+
+<section class="section">
+
+    <div class="section-container">
+
+        <div class="grid gap-6 md:grid-cols-2">
+
+            {% for skill in skills %}
+
+                <div class="glass-card reveal">
+
+                    <div class="flex justify-between">
+
+                        <div>
+
+                            <h3 class="text-xl font-bold text-white">
+                                {{ skill.name }}
+                            </h3>
+
+                            <p class="mt-1 text-sm text-slate-500">
+                                {{ skill.get_category_display }}
+                            </p>
+
+                        </div>
+
+                        <span class="text-xl font-bold text-cyan-400">
+                            {{ skill.percentage }}%
+                        </span>
+
+                    </div>
+
+                    <div class="mt-6 h-3 rounded-full bg-slate-800">
+
+                        <div
+                            class="skill-progress h-full rounded-full"
+                            style="width: {{ skill.percentage }}%;"
+                        ></div>
+
+                    </div>
+
+                    {% if skill.description %}
+
+                        <p class="mt-5 text-sm leading-7 text-slate-400">
+                            {{ skill.description }}
+                        </p>
+
+                    {% endif %}
+
+                </div>
+
+            {% empty %}
+
+                <p class="text-slate-400">
+                    Aucune compétence disponible.
+                </p>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {{ project.title }} — Nancy Melissa
+{% endblock %}
+
+{% block content %}
+
+<section class="page-hero">
+
+    <div class="section-container">
+
+        <span class="section-kicker">
+            Projet
+        </span>
+
+        <h1 class="page-title">
+            {{ project.title }}
+        </h1>
+
+    </div>
+
+</section>
+
+
+<section class="section">
+
+    <div class="section-container max-w-5xl">
+
+        {% if project.image %}
+
+            <img
+                src="{{ project.image.url }}"
+                alt="{{ project.title }}"
+                class="mb-12 w-full rounded-3xl object-cover shadow-2xl"
+            >
+
+        {% endif %}
+
+        <div class="glass-card">
+
+            <p class="text-lg leading-8 text-slate-300">
+                {{ project.description }}
+            </p>
+
+            <div class="mt-8 flex flex-wrap gap-3">
+
+                {% for technology in project.technology_list %}
+
+                    <span class="tech-badge">
+                        {{ technology }}
+                    </span>
+
+                {% endfor %}
+
+            </div>
+
+            <div class="mt-10 flex flex-wrap gap-4">
+
+                {% if project.github_url %}
+
+                    <a
+                        href="{{ project.github_url }}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="btn-secondary"
+                    >
+                        GitHub
+                    </a>
+
+                {% endif %}
+
+                {% if project.demo_url %}
+
+                    <a
+                        href="{{ project.demo_url }}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="btn-primary"
+                    >
+                        Voir la démo
+                    </a>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

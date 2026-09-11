@@ -1,0 +1,298 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        {{ conversation.visitor_name }} | Chat
+    </title>
+
+    <link rel="stylesheet" href="{% static 'css/output.css' %}">
+
+</head>
+
+
+<body class="dashboard-body">
+
+
+<div class="dashboard-layout">
+
+
+    <!-- SIDEBAR -->
+
+    <aside class="dashboard-sidebar">
+
+        <div class="sidebar-brand">
+
+            <div class="brand-logo">
+                N
+            </div>
+
+            <div>
+
+                <h1>Portfolio</h1>
+
+                <span>
+                    Administration
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <nav class="sidebar-nav">
+
+            <a href="{% url 'users:dashboard' %}"
+               class="sidebar-link">
+
+                ⌂
+                Dashboard
+
+            </a>
+
+
+            <a href="{% url 'users:dashboard-profile' %}"
+               class="sidebar-link">
+
+                ◉
+                Mon profil
+
+            </a>
+
+
+            <a href="{% url 'users:messages' %}"
+               class="sidebar-link active">
+
+                ✉
+                Messages
+
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-bottom">
+
+            <a href="{% url 'portfolio:home' %}"
+               class="sidebar-link">
+
+                ↗ Voir le portfolio
+
+            </a>
+
+
+            <a href="{% url 'users:logout' %}"
+               class="sidebar-link logout-link">
+
+                ⇥ Déconnexion
+
+            </a>
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- CHAT -->
+
+    <main class="dashboard-main">
+
+
+        <header class="chat-header">
+
+            <a
+                href="{% url 'users:messages' %}"
+                class="back-button">
+
+                ←
+
+            </a>
+
+
+            <div class="conversation-avatar">
+
+                {{ conversation.visitor_name|first|upper }}
+
+            </div>
+
+
+            <div class="chat-user-info">
+
+                <strong>
+                    {{ conversation.visitor_name }}
+                </strong>
+
+                <span>
+                    {{ conversation.visitor_email }}
+                </span>
+
+            </div>
+
+
+        </header>
+
+
+
+        <section class="chat-container">
+
+
+            <div class="chat-messages"
+                 id="chatMessages">
+
+
+                {% for message in messages %}
+
+
+                    <div
+                        class="chat-message
+                        {% if message.sender %}
+                            sent
+                        {% else %}
+                            received
+                        {% endif %}">
+
+
+                        <div class="message-bubble">
+
+
+                            {% if message.content %}
+
+                                <p>
+                                    {{ message.content }}
+                                </p>
+
+                            {% endif %}
+
+
+                            {% if message.attachment %}
+
+                                <a
+                                    href="{{ message.attachment.url }}"
+                                    target="_blank"
+                                    class="message-attachment">
+
+                                    📎
+                                    {{ message.original_filename }}
+
+                                </a>
+
+                            {% endif %}
+
+
+                            <small>
+
+                                {{ message.created_at|date:"d/m/Y H:i" }}
+
+                            </small>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                {% empty %}
+
+
+                    <div class="empty-state">
+
+                        <h4>
+                            Début de la conversation
+                        </h4>
+
+                        <p>
+                            Aucun message supplémentaire.
+                        </p>
+
+                    </div>
+
+
+                {% endfor %}
+
+
+            </div>
+
+
+
+            <!-- FORMULAIRE CHAT -->
+
+            <form
+                method="POST"
+                enctype="multipart/form-data"
+                action="{% url 'users:send-message' conversation.id %}"
+                class="chat-form">
+
+                {% csrf_token %}
+
+
+                <label
+                    for="attachment"
+                    class="attachment-button">
+
+                    📎
+
+                </label>
+
+
+                <input
+                    type="file"
+                    name="attachment"
+                    id="attachment"
+                    hidden>
+
+
+                <input
+                    type="text"
+                    name="content"
+                    placeholder="Écrire un message..."
+                    autocomplete="off">
+
+
+                <button
+                    type="submit"
+                    class="send-button">
+
+                    ➤
+
+                </button>
+
+
+            </form>
+
+
+        </section>
+
+
+    </main>
+
+</div>
+
+
+<script>
+
+    const chatMessages =
+        document.getElementById("chatMessages");
+
+    if (chatMessages) {
+
+        chatMessages.scrollTop =
+            chatMessages.scrollHeight;
+
+    }
+
+</script>
+
+
+</body>
+
+</html>
